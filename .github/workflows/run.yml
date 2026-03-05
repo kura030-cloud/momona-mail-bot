@@ -1,0 +1,26 @@
+name: Daily Mail Bot
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # UTC 2点 = 北京时间10点
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        run: python main.py
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
